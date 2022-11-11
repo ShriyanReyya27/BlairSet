@@ -1,13 +1,141 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+ol, ul {
+  padding-left: 30px;
+}
+
+.board-row::after {
+  clear:both;
+  content: "";    
+  display: table;
+}
+
+.status {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 10px;
+}
+
+.square {
+  transform: scale(1.0);
+  transition-duration: 0.0s;
+  background: rgb(255, 255, 255);
+  border: 2px solid rgb(120, 120, 120);
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 112.2px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 2px 0px 0px 0px;
+  text-align: center;
+  width: 191.52px;
+}
+
+.square:hover {
+  transform: scale(1.04);
+  transition-duration: 0.01s;
+}
+
+.squareSelected {
+  transform: scale(1.0);
+  transition-duration: 0.0s;
+  background: rgb(255, 255, 255);
+  border: 4px solid rgb(13, 202, 98);
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 112.2px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 0px 0px 0px 0px;
+  text-align: center;
+  width: 191.52px;
+}
+
+.squareSelected:hover {
+  transform: scale(1.03);
+  transition-duration: 0.01s;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.setNotFound{
+  background: rgb(255, 255, 255);
+  border: 4px solid rgb(242, 49, 31);
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 112.2px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 0px 0px 0px 0px;
+  text-align: center;
+  width: 191.52px;
+  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  perspective: 1000px;
+}
+
+.setFound{
+  transform: scale(1.05);
+  transition-duration: 0.1s;
+  background: rgb(255, 255, 255);
+  border: 4px solid rgb(13, 202, 98);
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 112.2px;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding: 0px 0px 0px 0px;
+  text-align: center;
+  width: 191.52px;
+  /*animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;*/
+  /*transform: translate3d(0, 0, 0);*/
+  /*perspective: 1000px;*/
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.kbd-navigation .square:focus {
+  background: rgb(194, 254, 255);
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+.App {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-align: right;
 }
