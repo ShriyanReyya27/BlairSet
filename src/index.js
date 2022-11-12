@@ -892,6 +892,8 @@ class Board extends React.Component{
 
   render(){
     let status = "cards selected: " + this.state.selectedCards.length + " | cards remaining: " + deck.length;
+    let gameInfo = "Select groups of three cards that are SETS until the deck has been finished.";
+    let moreGameInfo = "A SET consists of 3 cards in which each of the cards' features, looked at one-by-one, are the same on each card, or, are different on each card. All of the features must separately satisfy this rule.";
 
     return (
       <div>
@@ -973,7 +975,6 @@ class Game extends React.Component {
           <Board />
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
           <ol>{/* TODO */}</ol>
         </div>
       </div>
@@ -1009,8 +1010,8 @@ function createTriplets(cards){
   let n = cards.length;
   let triplets = [];
   for(let i = 0; i < n - 2; i++){
-    for(let j = 1; j < n - 1; j++){
-      for(let k = 2; k < n; k++){
+    for(let j = i+1; j < n - 1; j++){
+      for(let k = j+1; k < n; k++){
         let triplet = [];
         triplet.push(cards[i]);
         triplet.push(cards[j]);

@@ -132,7 +132,9 @@ ol, ul {
 }
 
 .game-info {
-  margin-left: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .App {
