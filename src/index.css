@@ -44,7 +44,7 @@ ol, ul {
   transform: scale(1.0);
   transition-duration: 0.0s;
   background: rgb(255, 255, 255);
-  border: 4px solid rgb(13, 202, 98);
+  border: 5px solid rgb(13, 202, 98);
   float: left;
   font-size: 24px;
   font-weight: bold;
@@ -68,7 +68,7 @@ ol, ul {
 
 .setNotFound{
   background: rgb(255, 255, 255);
-  border: 4px solid rgb(242, 49, 31);
+  border: 5px solid rgb(242, 49, 31);
   float: left;
   font-size: 24px;
   font-weight: bold;
@@ -79,7 +79,7 @@ ol, ul {
   padding: 0px 0px 0px 0px;
   text-align: center;
   width: 191.52px;
-  animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
   transform: translate3d(0, 0, 0);
   perspective: 1000px;
 }
@@ -88,7 +88,7 @@ ol, ul {
   transform: scale(1.05);
   transition-duration: 0.1s;
   background: rgb(255, 255, 255);
-  border: 4px solid rgb(13, 202, 98);
+  border: 5px solid rgb(13, 202, 98);
   float: left;
   font-size: 24px;
   font-weight: bold;
@@ -105,7 +105,7 @@ ol, ul {
 }
 
 @keyframes shake {
-  10%, 90% {
+  /* 10%, 90% {
     transform: translate3d(-1px, 0, 0);
   }
   20%, 80% {
@@ -116,6 +116,18 @@ ol, ul {
   }
   40%, 60% {
     transform: translate3d(4px, 0, 0);
+  } */
+  10%, 20%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  30%, 40%, 70%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  50%, 60% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  70%, 80% {
+    transform: translate3d(2px, 0, 0);
   }
 }
 

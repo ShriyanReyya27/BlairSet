@@ -771,8 +771,8 @@ class Card extends React.Component{
       >
         <img src = {imageMap.get(this.props.imageIndex).img} 
             alt = ""
-            height = "105"
-            width = "179"
+            height = "99.75"
+            width = "170.05"
       />
       </button>
       
@@ -845,7 +845,7 @@ class Board extends React.Component{
           }
           this.setState({cardSelectStates : newCardSelectStates, selectedCards : newSelectedCards});
           console.log("start");
-          await sleep(900);
+          await sleep(510);
           console.log("end");
           newCardSelectStates = Array(12).fill(0);
           newSelectedCards = [];
