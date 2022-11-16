@@ -752,6 +752,8 @@ for(let i = 0; i < 81; i++){
   deck.push(i);
 }
 
+var starterDeck = createStarterDeck();
+
 // class Card extends React.Component{
 
 //   render() {
@@ -804,13 +806,12 @@ function Card(props){
 }
 
 function Board(props) {
+
   const [cardSelectStates, setCardSelectStates] = useState(Array(12).fill(0));
   const [selectedCards, setSelectedCards] = useState([]);
-  const [boardIndices, setBoardIndices] = useState(createStarterDeck());
+  const [boardIndices, setBoardIndices] = useState(starterDeck);
   //const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
-  console.log("creating consts");
-  console.log(boardIndices);
-  
+
   function renderCard(i, j){
     return (
       <Card 
@@ -827,8 +828,10 @@ function Board(props) {
     var newSelectedCards = [];
 
     if (cardSelectStates[j] === 0) {
+      console.log("click");
       newCardSelectStates[j] = 1;
     } else {
+      console.log("unclick");
       newCardSelectStates[j] = 0;
     }
 
@@ -838,13 +841,17 @@ function Board(props) {
       }
     }
 
+    console.log("new card select states: " + newCardSelectStates);
     setCardSelectStates(newCardSelectStates);
+    console.log("new selected cards: " + newSelectedCards);
     setSelectedCards(newSelectedCards);
 
     if (newSelectedCards.length === 3) {
 
       var oldBoardIndices = boardIndices.slice();
 
+      
+      console.log("new selected cards eheheh: " + newSelectedCards);
       if (isSet(newSelectedCards[0], newSelectedCards[1], newSelectedCards[2])) {
 
         var newBoardIndices = boardIndices.slice();
@@ -874,8 +881,12 @@ function Board(props) {
         newBoardIndices = removeAndRefill(newSelectedCards);
         newSelectedCards = [];
 
+        
+        console.log("new board indices: " + newBoardIndices);
         setBoardIndices(newBoardIndices);
+        console.log("new card select states: " + newCardSelectStates);
         setCardSelectStates(newCardSelectStates);
+        console.log("new selected cards: " + newSelectedCards);
         setSelectedCards(newSelectedCards);
 
       } else {
@@ -900,6 +911,7 @@ function Board(props) {
       }
     }
   }
+
   function removeAndRefill(newSelectedCards){
     const newBoardIndices = boardIndices.slice();
 
@@ -962,10 +974,6 @@ function Board(props) {
 //       //boardIndices : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
 //       boardIndices : createStarterDeck()
 //     };
-//   }
-
-//   handleKeyDown(e){
-//     if(e.)
 //   }
 
 //   async handleClick(j){
@@ -1140,9 +1148,9 @@ function Timer() {
   );
 }
 
-class Game extends React.Component {
+function Game(props) {
   
-  render() {
+
     return (
       <div className="game">
         <div className="game-board">
@@ -1154,13 +1162,14 @@ class Game extends React.Component {
         </div>
       </div>
     );
-  }
 }
 
 function isSet(i, j, k){
   let a = imageMap.get(i);
   let b = imageMap.get(j);
   let c = imageMap.get(k);
+
+  console.log("isSet being called rn");
 
   if (!(((a.number === b.number) && (b.number === c.number)) ||
         ((a.number !== b.number) && (a.number !== c.number) && (b.number !== c.number)))) {
@@ -1225,6 +1234,7 @@ function shuffle(array) {
 
 
 function createStarterDeck(){
+  console.log("creating starter deck");
   let indices = [];
   let tempDeck = deck.slice();
   tempDeck = shuffle(tempDeck);
