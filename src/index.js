@@ -807,10 +807,23 @@ function Card(props){
 
 function Board(props) {
 
+  //var cards = createStarterDeck();
   const [cardSelectStates, setCardSelectStates] = useState(Array(12).fill(0));
   const [selectedCards, setSelectedCards] = useState([]);
   const [boardIndices, setBoardIndices] = useState(starterDeck);
+  //const keyMap = useState([49, 50, 51, 81, 87, 69, 65, 83, 68, 90, 88, 67]);
+  const [keyMap] = useState(['1', '2', '3', 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']);
+  //console.log(keyMap.indexOf('1'));
   //const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+
+  React.useEffect(() => {
+    window.addEventListener('keydown', onKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', onKeyPress);
+    };
+  }, []);
+
 
   function renderCard(i, j){
     return (
@@ -823,7 +836,14 @@ function Board(props) {
     );
   }
 
+  const onKeyPress = (event) => {
+    //console.log(event.key);
+    /*keyMap.includes(event.key) ?*/ handleClick(keyMap.indexOf(event.key)) /*: null*/;
+  }
+
   async function handleClick(j) {
+    console.log(j);
+
     var newCardSelectStates = cardSelectStates;
     var newSelectedCards = [];
 
@@ -894,6 +914,7 @@ function Board(props) {
         for (let element of newSelectedCards) {
           let index = oldBoardIndices.indexOf(element, 0);
           newCardSelectStates[index] = 3;
+          console.log("these cards not a set");
         }
 
         setCardSelectStates(newCardSelectStates);
@@ -906,6 +927,7 @@ function Board(props) {
         newCardSelectStates = Array(12).fill(0);
         newSelectedCards = [];
 
+        console.log("new card select states: " + newCardSelectStates);
         setCardSelectStates(newCardSelectStates);
         setSelectedCards(newSelectedCards);
       }
