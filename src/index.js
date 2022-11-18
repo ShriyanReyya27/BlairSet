@@ -822,7 +822,7 @@ function Board(props) {
     return () => {
       window.removeEventListener('keydown', onKeyPress);
     };
-  }, []);
+  }, [selectedCards, cardSelectStates]);
 
 
   function renderCard(i, j){
@@ -837,8 +837,7 @@ function Board(props) {
   }
 
   const onKeyPress = (event) => {
-    //console.log(event.key);
-    /*keyMap.includes(event.key) ?*/ handleClick(keyMap.indexOf(event.key)) /*: null*/;
+    handleClick(keyMap.indexOf(event.key));
   }
 
   async function handleClick(j) {
