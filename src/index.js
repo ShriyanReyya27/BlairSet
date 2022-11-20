@@ -754,6 +754,8 @@ for(let i = 0; i < 81; i++){
 
 var starterDeck = createStarterDeck();
 
+var stoppingLength = 3;
+
 // class Card extends React.Component{
 
 //   render() {
@@ -811,9 +813,8 @@ function Board(props) {
   const [cardSelectStates, setCardSelectStates] = useState(Array(12).fill(0));
   const [selectedCards, setSelectedCards] = useState([]);
   const [boardIndices, setBoardIndices] = useState(starterDeck);
-  //const keyMap = useState([49, 50, 51, 81, 87, 69, 65, 83, 68, 90, 88, 67]);
   const [keyMap] = useState(['1', '2', '3', 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']);
-  //console.log(keyMap.indexOf('1'));
+  const [numSets, setNumSets] = useState(0);
   //const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 
   React.useEffect(() => {
@@ -841,16 +842,13 @@ function Board(props) {
   }
 
   async function handleClick(j) {
-    console.log(j);
 
     var newCardSelectStates = cardSelectStates;
     var newSelectedCards = [];
 
     if (cardSelectStates[j] === 0) {
-      console.log("click");
       newCardSelectStates[j] = 1;
     } else {
-      console.log("unclick");
       newCardSelectStates[j] = 0;
     }
 
@@ -860,17 +858,14 @@ function Board(props) {
       }
     }
 
-    console.log("new card select states: " + newCardSelectStates);
     setCardSelectStates(newCardSelectStates);
-    console.log("new selected cards: " + newSelectedCards);
     setSelectedCards(newSelectedCards);
 
     if (newSelectedCards.length === 3) {
 
       var oldBoardIndices = boardIndices.slice();
 
-      
-      console.log("new selected cards eheheh: " + newSelectedCards);
+    
       if (isSet(newSelectedCards[0], newSelectedCards[1], newSelectedCards[2])) {
 
         var newBoardIndices = boardIndices.slice();
@@ -893,40 +888,34 @@ function Board(props) {
         setCardSelectStates(newCardSelectStates);
         setSelectedCards(newSelectedCards);
 
-        console.log("start set");
         await sleep(500);
-        console.log("end set");
         newCardSelectStates = Array(12).fill(0);
         newBoardIndices = removeAndRefill(newSelectedCards);
         newSelectedCards = [];
 
         
-        console.log("new board indices: " + newBoardIndices);
         setBoardIndices(newBoardIndices);
-        console.log("new card select states: " + newCardSelectStates);
         setCardSelectStates(newCardSelectStates);
-        console.log("new selected cards: " + newSelectedCards);
         setSelectedCards(newSelectedCards);
+        setNumSets(numSets +1);
 
       } else {
 
         for (let element of newSelectedCards) {
           let index = oldBoardIndices.indexOf(element, 0);
           newCardSelectStates[index] = 3;
-          console.log("these cards not a set");
         }
+
+        console.log("not a set");
 
         setCardSelectStates(newCardSelectStates);
         setSelectedCards(newSelectedCards);
 
-        console.log("start not a set");
         await sleep(510);
-        console.log("end not a set");
 
         newCardSelectStates = Array(12).fill(0);
         newSelectedCards = [];
 
-        console.log("new card select states: " + newCardSelectStates);
         setCardSelectStates(newCardSelectStates);
         setSelectedCards(newSelectedCards);
       }
@@ -952,185 +941,88 @@ function Board(props) {
       deck = tempDeck.slice();
       return newBoardIndices;
     } else{
-      this.removeAndRefill();
+      removeAndRefill();
     }
   }
-  let status = "cards selected: " + selectedCards.length + " | cards remaining: " + deck.length;
-  return (
-    <div>
-      <div className="status">{status}</div>
-      <div className="board-row">
-        {renderCard(boardIndices[0], 0)}
-        {renderCard(boardIndices[1], 1)}
-        {renderCard(boardIndices[2], 2)}
-      </div>
-      <div className="board-row">
-        <div className='board-card'>
-          {renderCard(boardIndices[3], 3)}
+  let status = "cards remaining: " + deck.length + " | sets found: " + numSets;
+  if(deck.length >= stoppingLength){
+    return (
+      <div>
+        <div className="status">{status}</div>
+        <div className="board-row">
+          {renderCard(boardIndices[0], 0)}
+          {renderCard(boardIndices[1], 1)}
+          {renderCard(boardIndices[2], 2)}
         </div>
-        {renderCard(boardIndices[4], 4)}
-        {renderCard(boardIndices[5], 5)}
+        <div className="board-row">
+          <div className='board-card'>
+            {renderCard(boardIndices[3], 3)}
+          </div>
+          {renderCard(boardIndices[4], 4)}
+          {renderCard(boardIndices[5], 5)}
+        </div>
+        <div className="board-row">
+          {renderCard(boardIndices[6], 6)}
+          {renderCard(boardIndices[7], 7)}
+          {renderCard(boardIndices[8], 8)}
+        </div>
+        <div className="board-row">
+          {renderCard(boardIndices[9], 9)}
+          {renderCard(boardIndices[10], 10)}
+          {renderCard(boardIndices[11], 11)}
+        </div>
       </div>
-      <div className="board-row">
-        {renderCard(boardIndices[6], 6)}
-        {renderCard(boardIndices[7], 7)}
-        {renderCard(boardIndices[8], 8)}
+    );
+  } else {
+    return(
+      <div className= 'status'>
+        Game over! Score: {numSets}
       </div>
-      <div className="board-row">
-        {renderCard(boardIndices[9], 9)}
-        {renderCard(boardIndices[10], 10)}
-        {renderCard(boardIndices[11], 11)}
-      </div>
-    </div>
-  );
+    );
+  }
 }
 
-
-// class Board extends React.Component{
-//   constructor(props){
-//     super(props);
-//     this.state = {
-//       cardSelectStates : Array(12).fill(0),
-//       selectedCards : [],
-//       //boardIndices : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
-//       boardIndices : createStarterDeck()
-//     };
-//   }
-
-//   async handleClick(j){
-//     var newCardSelectStates = this.state.cardSelectStates.slice();
-//     var newSelectedCards = [];
-//     if(this.state.cardSelectStates[j] === 0){
-//       newCardSelectStates[j] = 1;
-//     } else {
-//       newCardSelectStates[j] = 0;
-//     }
-
-//     for(let i = 0; i < 12; i++){
-//       if(newCardSelectStates[i] === 1){
-//         newSelectedCards.push(this.state.boardIndices[i]);
-//       }
-//     }
-
-//     this.setState({
-//       cardSelectStates : newCardSelectStates, 
-//       selectedCards : newSelectedCards});
-
-//       if(newSelectedCards.length === 3){
-//         var oldBoardIndices = this.state.boardIndices.slice();
-//         if(isSet(newSelectedCards[0], newSelectedCards[1], newSelectedCards[2])){
-//           var newBoardIndices = this.state.boardIndices.slice();
-//           var tempDeck = deck.slice();
-//           tempDeck = shuffle(tempDeck);
-  
-//           var count = 0;
-//           for(let element of newSelectedCards){
-//             let index = newBoardIndices.indexOf(element, 0);
-//             newBoardIndices[index] = tempDeck[count];
-//             tempDeck.splice(count, 1);
-//             count++;
-//           }
-//           for(let element of newSelectedCards){
-//             let index = oldBoardIndices.indexOf(element, 0);
-//             console.log("got element index");
-//             newCardSelectStates[index] = 2;
-//           }
-//           this.setState({cardSelectStates : newCardSelectStates, selectedCards : newSelectedCards});
-//           console.log("start");
-//           await sleep(500);
-//           console.log("end");
-//           newCardSelectStates = Array(12).fill(0);
-//           newBoardIndices = this.removeAndRefill(newSelectedCards);
-//           newSelectedCards = [];
-//           this.setState({boardIndices : newBoardIndices, cardSelectStates : newCardSelectStates, selectedCards : newSelectedCards});
-//         } else{
-//           for(let element of newSelectedCards){
-//             let index = oldBoardIndices.indexOf(element, 0);
-//             console.log("got element index");
-//             newCardSelectStates[index] = 3;
-//           }
-//           this.setState({cardSelectStates : newCardSelectStates, selectedCards : newSelectedCards});
-//           console.log("start");
-//           await sleep(510);
-//           console.log("end");
-//           newCardSelectStates = Array(12).fill(0);
-//           newSelectedCards = [];
-//           this.setState({cardSelectStates : newCardSelectStates, selectedCards : newSelectedCards});
-//         }
-//       }
-//   }
-
-//   renderCard(i, j){
-//     return (
-//       <Card 
-//         id = {j}
-//         imageIndex = {i}
-//         onClick={() => this.handleClick(j)}
-//         selectState = {this.state.cardSelectStates[j]}
-//        />
-//     );
-//   }
-
-//   removeAndRefill(newSelectedCards){
-//     const newBoardIndices = this.state.boardIndices.slice();
-
-//     var tempDeck = deck.slice();
-
-//     tempDeck = shuffle(tempDeck);
-
-//     var count = 0;
-//     for(let element of newSelectedCards){
-//       let index = newBoardIndices.indexOf(element, 0);
-//       newBoardIndices[index] = tempDeck[count];
-//       tempDeck.splice(count, 1);
-//       count++;
-//     }
-
-//     if(hasSet(newBoardIndices)){
-//       deck = tempDeck.slice();
-//       return newBoardIndices;
-//     } else{
-//       this.removeAndRefill();
-//     }
-//   }
-
-//   render(){
-//     let status = "cards selected: " + this.state.selectedCards.length + " | cards remaining: " + deck.length;
-//     let gameInfo = "Select groups of three cards that are SETS until the deck has been finished.";
-//     let moreGameInfo = "A SET consists of 3 cards in which each of the cards' features, looked at one-by-one, are the same on each card, or, are different on each card. All of the features must separately satisfy this rule.";
-
-//     return (
-//       <div>
-//         <div className="status">{status}</div>
-//         <div className="status">{this.state.userMessage}</div>
-//         <div className="board-row">
-//           {this.renderCard(this.state.boardIndices[0], 0)}
-//           {this.renderCard(this.state.boardIndices[1], 1)}
-//           {this.renderCard(this.state.boardIndices[2], 2)}
-//         </div>
-//         <div className="board-row">
-//           <div className='board-card'>
-//             {this.renderCard(this.state.boardIndices[3], 3)}
-//           </div>
-//           {this.renderCard(this.state.boardIndices[4], 4)}
-//           {this.renderCard(this.state.boardIndices[5], 5)}
-//         </div>
-//         <div className="board-row">
-//           {this.renderCard(this.state.boardIndices[6], 6)}
-//           {this.renderCard(this.state.boardIndices[7], 7)}
-//           {this.renderCard(this.state.boardIndices[8], 8)}
-//         </div>
-//         <div className="board-row">
-//           {this.renderCard(this.state.boardIndices[9], 9)}
-//           {this.renderCard(this.state.boardIndices[10], 10)}
-//           {this.renderCard(this.state.boardIndices[11], 11)}
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-
 function Timer() {
+  // const [countDown, setCountDown] = useState(0);
+  // const [runTimer, setRunTimer] = useState(true);
+
+  // useEffect(() => {
+  //   let timerId;
+
+  //   if (runTimer) {
+  //     setCountDown(0);
+  //     timerId = setInterval(() => {
+  //       setCountDown((countDown) => countDown + 1);
+  //     }, 1000);
+  //   } else {
+  //     clearInterval(timerId);
+  //   }
+
+  //   return () => clearInterval(timerId);
+  // }, [runTimer]);
+
+  // React.useEffect(() => {
+  //   if (countDown < 0 && runTimer) {
+  //     console.log("expired");
+  //     setRunTimer(false);
+  //     setCountDown(0);
+  //   }
+  // }, [countDown, runTimer]);
+
+  // const seconds = String(countDown % 60).padStart(2, 0);
+  // const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
+
+  // return (
+  //   <div className="App">
+  //     <div>
+  //       Time: {minutes}:{seconds}
+  //     </div>
+  //   </div>
+  // );
+}
+
+function Game(props) {
+
   const [countDown, setCountDown] = useState(0);
   const [runTimer, setRunTimer] = useState(true);
 
@@ -1150,36 +1042,36 @@ function Timer() {
   }, [runTimer]);
 
   React.useEffect(() => {
-    if (countDown < 0 && runTimer) {
-      console.log("expired");
+    if (deck.length < stoppingLength) {
       setRunTimer(false);
-      setCountDown(0);
     }
   }, [countDown, runTimer]);
 
   const seconds = String(countDown % 60).padStart(2, 0);
   const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
-
-  return (
-    <div className="App">
-      <div>
-        Time: {minutes}:{seconds}
-      </div>
-    </div>
-  );
-}
-
-function Game(props) {
   
-
+    // if(deck.length < stoppingLength){
+    //   setRunTimer(false);
+    //   return (
+    //     <div className="game">
+    //       <div>  
+    //         <Board/>
+    //         <div className='status'>
+    //         Time taken: {minutes}:{seconds}
+    //         </div>
+            
+    //       </div>
+    //     </div>
+    //   );
+    // }
     return (
       <div className="game">
-        <div className="game-board">
-          <Timer />
+        <div className="game-board">  
+          {/* <Timer /> */}
+          <div className='App'>
+            Time: {minutes}:{seconds}
+          </div>
           <Board />
-        </div>
-        <div className="game-info">
-          <ol>{/* TODO */}</ol>
         </div>
       </div>
     );
@@ -1189,8 +1081,6 @@ function isSet(i, j, k){
   let a = imageMap.get(i);
   let b = imageMap.get(j);
   let c = imageMap.get(k);
-
-  console.log("isSet being called rn");
 
   if (!(((a.number === b.number) && (b.number === c.number)) ||
         ((a.number !== b.number) && (a.number !== c.number) && (b.number !== c.number)))) {
@@ -1269,7 +1159,7 @@ function createStarterDeck(){
     }
     return indices;
   } else{
-    this.createStarterDeck();
+    createStarterDeck();
   }
 }
 

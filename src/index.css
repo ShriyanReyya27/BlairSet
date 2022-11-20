@@ -152,4 +152,16 @@ ol, ul {
 .App {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   text-align: right;
+  /* width:500px;
+  margin:50px ;
+  float:right;
+  top:-40px; */
+  /* width: 300px;
+  border: 15px solid green;
+  padding: 50px;
+  margin: 20px;
+  display: flex;
+  align-self: right;
+  right: -1000px;
+  justify-content: space-between; */
 }
