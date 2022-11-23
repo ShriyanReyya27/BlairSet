@@ -748,43 +748,22 @@ imageMap.set(79, cardObj79);
 imageMap.set(80, cardObj80);
 
 var deck = [];
+
+//full deck
 for(let i = 0; i < 81; i++){
   deck.push(i);
 }
 
+//randomized starter deck
 var starterDeck = createStarterDeck();
 
+//stopping length
 var stoppingLength = 3;
 
-// class Card extends React.Component{
-
-//   render() {
-//     let bClass = "square";
-//     if(this.props.selectState === 1){
-//       bClass = "squareSelected";
-//     } else if(this.props.selectState === 2){
-//       bClass = "setFound";
-//     } else if(this.props.selectState === 3){
-//       bClass = "setNotFound";
-//     }
-
-//     return(
-//       <button
-//         className= {bClass}
-//         onClick={() => {this.props.onClick();}}
-//       >
-//         <img src = {imageMap.get(this.props.imageIndex).img} 
-//             alt = ""
-//             height = "99.75"
-//             width = "170.05"
-//       />
-//       </button>
-      
-//     );
-//   }
-// }
-
+//Card component
 function Card(props){
+
+  //styling changes for when the user selects cards and gets/doesnt get a set
   let bClass = "square";
     if(props.selectState === 1){
       bClass = "squareSelected";
@@ -800,23 +779,26 @@ function Card(props){
       >
         <img src = {imageMap.get(props.imageIndex).img} 
             alt = ""
-            height = "99.75"
-            width = "170.05"
+            height = "99"
+            width = "151"
       />
       </button>
   );
 }
 
+//Board component - most of the stuff happens here
 function Board(props) {
 
-  //var cards = createStarterDeck();
+  //states
   const [cardSelectStates, setCardSelectStates] = useState(Array(12).fill(0));
   const [selectedCards, setSelectedCards] = useState([]);
-  const [boardIndices, setBoardIndices] = useState(starterDeck);
+  //const [boardIndices, setBoardIndices] = useState(starterDeck);
+  //for debug and demo purposes
+  const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   const [keyMap] = useState(['1', '2', '3', 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']);
   const [numSets, setNumSets] = useState(0);
-  //const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
 
+  //keymap to select cards useeffect
   React.useEffect(() => {
     window.addEventListener('keydown', onKeyPress);
 
@@ -825,7 +807,7 @@ function Board(props) {
     };
   }, [selectedCards, cardSelectStates]);
 
-
+  //render card
   function renderCard(i, j){
     return (
       <Card 
@@ -837,10 +819,12 @@ function Board(props) {
     );
   }
 
+  //handling keypress
   const onKeyPress = (event) => {
     handleClick(keyMap.indexOf(event.key));
   }
 
+  //handling click
   async function handleClick(j) {
 
     var newCardSelectStates = cardSelectStates;
@@ -922,6 +906,7 @@ function Board(props) {
     }
   }
 
+  //refilling deck after 3 cards with set chosen
   function removeAndRefill(newSelectedCards){
     const newBoardIndices = boardIndices.slice();
 

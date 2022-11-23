@@ -27,12 +27,12 @@ ol, ul {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 112.2px;
+  height: 111px;
   margin-right: 10px;
   margin-top: 10px;
   padding: 2px 0px 0px 0px;
   text-align: center;
-  width: 191.52px;
+  width: 168px;
 }
 
 .square:hover {
@@ -49,12 +49,12 @@ ol, ul {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 112.2px;
+  height: 111px;
   margin-right: 10px;
   margin-top: 10px;
   padding: 0px 0px 0px 0px;
   text-align: center;
-  width: 191.52px;
+  width: 168px;
 }
 
 .squareSelected:hover {
@@ -73,12 +73,12 @@ ol, ul {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 112.2px;
+  height: 111px;
   margin-right: 10px;
   margin-top: 10px;
   padding: 0px 0px 0px 0px;
   text-align: center;
-  width: 191.52px;
+  width: 168px;
   animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
   transform: translate3d(0, 0, 0);
   perspective: 1000px;
@@ -93,12 +93,12 @@ ol, ul {
   font-size: 24px;
   font-weight: bold;
   line-height: 34px;
-  height: 112.2px;
+  height: 111px;
   margin-right: 10px;
   margin-top: 10px;
   padding: 0px 0px 0px 0px;
   text-align: center;
-  width: 191.52px;
+  width: 168px;
   /*animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;*/
   /*transform: translate3d(0, 0, 0);*/
   /*perspective: 1000px;*/
