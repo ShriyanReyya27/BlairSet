@@ -792,9 +792,9 @@ function Board(props) {
   //states
   const [cardSelectStates, setCardSelectStates] = useState(Array(12).fill(0));
   const [selectedCards, setSelectedCards] = useState([]);
-  //const [boardIndices, setBoardIndices] = useState(starterDeck);
+  const [boardIndices, setBoardIndices] = useState(starterDeck);
   //for debug and demo purposes
-  const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
+  //const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   const [keyMap] = useState(['1', '2', '3', 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']);
   const [numSets, setNumSets] = useState(0);
 
