@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom/client';
+
 import './index.css';
 import card0 from './Set Cards/1DGB.png'; 
 //import card0 from './test.png';
@@ -757,8 +758,7 @@ for(let i = 0; i < 81; i++){
 //randomized starter deck
 var starterDeck = createStarterDeck();
 
-//stopping length
-var stoppingLength = 3;
+
 
 //Card component
 function Card(props){
@@ -786,20 +786,71 @@ function Card(props){
   );
 }
 
-//Board component - most of the stuff happens here
-function Board(props) {
 
+//Board component - most of the stuff happens here
+function Board() {
+
+  const findSetInterval = 20;
+  //min stopping length
+  const stoppingLength = 0;
   //states
   const [cardSelectStates, setCardSelectStates] = useState(Array(12).fill(0));
   const [selectedCards, setSelectedCards] = useState([]);
+  const [gameContinue, setGameContinue] = useState(true);
   const [boardIndices, setBoardIndices] = useState(starterDeck);
   //for debug and demo purposes
   //const [boardIndices, setBoardIndices] = useState([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   const [keyMap] = useState(['1', '2', '3', 'q', 'w', 'e', 'a', 's', 'd', 'z', 'x', 'c']);
   const [numSets, setNumSets] = useState(0);
+  const [numAttempts, setNumAttempts] = useState(0);
+  const [score, setScore] = useState(0);
+  
+  const [countDown, setCountDown] = useState(0);
+  const [runTimer, setRunTimer] = useState(true);
+
+  //state for number of ten second intervals
+  const [numIntervals, setNumIntervals] = useState(-1);
+
+  useEffect(() => {
+    let timerId;
+
+    if (runTimer) {
+      setCountDown(0);
+      timerId = setInterval(() => {
+        setCountDown((countDown) => countDown + 1);
+      }, 1000);
+    } else {
+      clearInterval(timerId);
+    }
+
+    return () => clearInterval(timerId);
+  }, [runTimer]);
+
+  useEffect(() => {
+    if (deck.length < stoppingLength) {
+      setRunTimer(false);
+    }
+  }, [countDown, runTimer]);
+
+  const seconds = String(countDown % 60).padStart(2, 0);
+  const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
+
+  //update the number of intervals every 20 seconds
+  useEffect(() => {
+    if (countDown % findSetInterval === 0) {
+      setNumIntervals((numIntervals) => numIntervals + 1);
+    }
+  }, [countDown]);  
+
+  useEffect(() => {
+    if(numIntervals > numSets){
+      setGameContinue(false);
+      setRunTimer(false);
+    }
+  }, [numIntervals, numSets]);
 
   //keymap to select cards useeffect
-  React.useEffect(() => {
+  useEffect(() => {
     window.addEventListener('keydown', onKeyPress);
 
     return () => {
@@ -847,6 +898,7 @@ function Board(props) {
 
     if (newSelectedCards.length === 3) {
 
+      setNumAttempts(numAttempts + 1);
       var oldBoardIndices = boardIndices.slice();
 
     
@@ -881,8 +933,10 @@ function Board(props) {
         setBoardIndices(newBoardIndices);
         setCardSelectStates(newCardSelectStates);
         setSelectedCards(newSelectedCards);
-        setNumSets(numSets +1);
+        setNumSets(numSets+1);
 
+        
+        setScore((numSets+1)*10 - (numIntervals+1)-2*(numAttempts+1));
       } else {
 
         for (let element of newSelectedCards) {
@@ -902,6 +956,9 @@ function Board(props) {
 
         setCardSelectStates(newCardSelectStates);
         setSelectedCards(newSelectedCards);
+
+        
+        setScore(((numSets)*10 - (numIntervals+1)-2*(numAttempts+1)));
       }
     }
   }
@@ -929,10 +986,17 @@ function Board(props) {
       removeAndRefill();
     }
   }
-  let status = "cards remaining: " + deck.length + " | sets found: " + numSets;
-  if(deck.length >= stoppingLength){
+  
+  let status = "cards remaining: " + deck.length + " | sets found: " + numSets + " | attempts: " + numAttempts + " | score: " + score;
+  if((deck.length >= stoppingLength) && (gameContinue)){
     return (
       <div>
+        <div className='App'>
+            Time: {minutes}:{seconds}
+          </div>
+          <div className='App'>
+            Intervals: {numIntervals}
+          </div>
         <div className="status">{status}</div>
         <div className="board-row">
           {renderCard(boardIndices[0], 0)}
@@ -959,11 +1023,21 @@ function Board(props) {
       </div>
     );
   } else {
-    return(
-      <div className= 'status'>
-        Game over! Score: {numSets}
-      </div>
-    );
+    if(deck.length < stoppingLength){
+      return(
+        <div className= 'gameover2'>
+          Congrats you got through all the cards! 
+          Score: {score}
+        </div>
+      );
+    }
+    else{
+      return(
+        <div className= 'gameover'>
+          Game over! Score: {score}
+        </div>
+      );
+    }
   }
 }
 
@@ -1008,54 +1082,9 @@ function Timer() {
 
 function Game(props) {
 
-  const [countDown, setCountDown] = useState(0);
-  const [runTimer, setRunTimer] = useState(true);
-
-  useEffect(() => {
-    let timerId;
-
-    if (runTimer) {
-      setCountDown(0);
-      timerId = setInterval(() => {
-        setCountDown((countDown) => countDown + 1);
-      }, 1000);
-    } else {
-      clearInterval(timerId);
-    }
-
-    return () => clearInterval(timerId);
-  }, [runTimer]);
-
-  React.useEffect(() => {
-    if (deck.length < stoppingLength) {
-      setRunTimer(false);
-    }
-  }, [countDown, runTimer]);
-
-  const seconds = String(countDown % 60).padStart(2, 0);
-  const minutes = String(Math.floor(countDown / 60)).padStart(2, 0);
-  
-    // if(deck.length < stoppingLength){
-    //   setRunTimer(false);
-    //   return (
-    //     <div className="game">
-    //       <div>  
-    //         <Board/>
-    //         <div className='status'>
-    //         Time taken: {minutes}:{seconds}
-    //         </div>
-            
-    //       </div>
-    //     </div>
-    //   );
-    // }
     return (
       <div className="game">
         <div className="game-board">  
-          {/* <Timer /> */}
-          <div className='App'>
-            Time: {minutes}:{seconds}
-          </div>
           <Board />
         </div>
       </div>
